@@ -1,16 +1,16 @@
 <form action="/article_new/apple" method="post">
   <label for="article_title">Article:</label>
-  <input type="text" id="article" name="article" />
+  <input type="text" id="article" name="article" value="<%= @article %>" required />
 <br>
   <label for="article_url">Url:</label>
-  <input type="text" id="article_url" name="article_url" />
+  <input type="text" id="article_url" name="article_url" value = "Sam" required/>
 <br>
 
   <label for="source">Source:</label>
-  <input type="text" id="source" name="source" />
+  <input type="text" id="source" name="source" value = "Bob" required/>
 <br>
  <label for="description">Description:</label>
-  <input style="height: 75px"type="text" id="description" name="description" size="100"/>
+  <input style="height: 75px"type="text" id="description" name="description" size="100" required/>
 <br>
   <input type="submit" />
 </form>
