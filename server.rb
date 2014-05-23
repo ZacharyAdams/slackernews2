@@ -25,14 +25,15 @@ post '/article_new/apple' do
   @url = params["article_url"]
   @source = params["source"]
   @description = params["description"]
-  if @description.length < 20
-    redirect '/article_new'
-  end
-  CSV.open("views/data.csv", "a") do |csv|
-    if csv != ''
-      csv.puts([@article,@url,@source,@description])
+   if @description.length <= 20
+     erb :form_page
+  else
+    CSV.open("views/data.csv", "a") do |csv|
+      if csv != ''
+        csv.puts([@article,@url,@source,@description])
+      end
     end
+    redirect '/'
   end
-  redirect '/'
 end
 
