@@ -1,6 +1,5 @@
 require 'sinatra'
-require 'csv'
-require 'pry'
+# require 'csv'
 require 'redis'
 require 'json'
 
@@ -12,13 +11,13 @@ def get_connection
   end
 end
 
-def read_in_art
-  articles = []
-  CSV.foreach('views/data.csv' , headers: true) do |row|
-    articles << row.to_hash
-  end
-  articles.reverse
-end
+# def read_in_art
+#   articles = []
+#   CSV.foreach('views/data.csv' , headers: true) do |row|
+#     articles << row.to_hash
+#   end
+#   articles.reverse
+# end
 
 def find_articles
   redis = get_connection
@@ -41,7 +40,7 @@ def save_article(url, title, description)
 end
 
 get '/' do
-  @read = read_in_art
+  @read = find_articles
   erb :index
 end
 
@@ -58,10 +57,11 @@ post '/article_new/apple' do
    if @description.length <= 20
      erb :form_page
   else
-    CSV.open("views/data.csv", "a") do |csv|
-      if csv != ''
-        csv.puts([@article,@url,@source,@description])
-      end
+      save_article([@article,@url,@source,@description])
+    # CSV.open("views/data.csv", "a") do |csv|
+    #   if csv != ''
+    #     csv.puts([@article,@url,@source,@description])
+      # end
     end
     redirect '/'
   end
