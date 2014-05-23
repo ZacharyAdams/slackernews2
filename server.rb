@@ -65,5 +65,4 @@ post '/article_new/apple' do
     end
     redirect '/'
   end
-end
 
