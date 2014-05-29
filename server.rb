@@ -52,20 +52,26 @@ end
 
 def save_question(title,description,url)
   sql = "INSERT INTO articles (title, description, url, created_at) " +
-    "VALUES ($1, NOW())"
+    "VALUES ($1,$2,$3, NOW())"
 
   connection = PG.connect(dbname: 'slacker_news')
-  connection.exec_params(sql, [title][description][url])
+  connection.exec_params(sql, [title, description, url])
   connection.close
+end
+
+def find_questions
+  connection = PG.connect(dbname: 'slacker_news')
+  results = connection.exec('SELECT * FROM articles')
+  connection.close
+
+  results
 end
 
 
 
 
-
-
 get '/' do
-  @read = find_articles
+  @read = find_questions
   erb :index
 end
 
@@ -75,14 +81,14 @@ get '/article_new' do
 end
 
 post '/article_new' do
-  @article = params["article"]
-  @url = params["article_url"]
+  @article = params["title"]
+  @url = params["url"]
   # @source = params["source"]
   @description = params["description"]
    if @description.length <= 20
      erb :form_page
   else
-      save_article(@url,@article,@description)
+      save_question(params["article"],params["description"],params["url"])
     # CSV.open("views/data.csv", "a") do |csv|
     #   if csv != ''
     #     csv.puts([@article,@url,@source,@description])
@@ -90,4 +96,3 @@ post '/article_new' do
     end
     redirect '/'
   end
-
