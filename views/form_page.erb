@@ -1,4 +1,4 @@
-<form action="/article_new/apple" method="post">
+<form action="/article_new" method="post">
   <label for="article_title">Article:</label>
   <input type="text" id="article" name="article" value="<%= @article %>" required />
 <br>
@@ -6,8 +6,8 @@
   <input type="text" id="article_url" name="article_url" value ="<%= @url %>" required/>
 <br>
 
-  <label for="source">Source:</label>
-  <input type="text" id="source" name="source" value ="<%= @source %>" required/>
+  <!-- <label for="source">Source:</label>
+  <input type="text" id="source" name="source" value ="<%= @source %>" required/> -->
 <br>
  <label for="description">Description:</label>
   <input style="height: 75px"type="text" id="description" name="description" value="<%= @description %>" size="100" required/>
