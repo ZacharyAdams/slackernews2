@@ -1,15 +1,16 @@
 require 'sinatra'
+ require 'pg'
 # require 'csv'
-require 'redis'
-require 'json'
+# require 'redis'
+# require 'json'
 
-def get_connection
-  if ENV.has_key?("REDISCLOUD_URL")
-    Redis.new(url: ENV["REDISCLOUD_URL"])
-  else
-    Redis.new
-  end
-end
+# def get_connection
+#   if ENV.has_key?("REDISCLOUD_URL")
+#     Redis.new(url: ENV["REDISCLOUD_URL"])
+#   else
+#     Redis.new
+#   end
+# end
 
 # def read_in_art
 #   articles = []
@@ -19,25 +20,49 @@ end
 #   articles.reverse
 # end
 
-def find_articles
-  redis = get_connection
-  serialized_articles = redis.lrange("slacker:articles", 0, -1)
+# def find_articles
+#   redis = get_connection
+#   serialized_articles = redis.lrange("slacker:articles", 0, -1)
 
-  articles = []
+#   articles = []
 
-  serialized_articles.each do |article|
-    articles << JSON.parse(article, symbolize_names: true)
+#   serialized_articles.each do |article|
+#     articles << JSON.parse(article, symbolize_names: true)
+#   end
+
+#   articles
+# end
+
+# def save_article(url, title, description)
+#   article = { url: url, title: title, description: description }
+
+#   redis = get_connection
+#   redis.rpush("slacker:articles", article.to_json)
+# end
+
+def db_connection()
+  begin
+    connection = PG.connect(dbname: 'slacker_news')
+
+    yield(connection)
+  ensure
+    connection.close
   end
-
-  articles
 end
 
-def save_article(url, title, description)
-  article = { url: url, title: title, description: description }
+def save_question(title,description,url)
+  sql = "INSERT INTO articles (title, description, url, created_at) " +
+    "VALUES ($1, NOW())"
 
-  redis = get_connection
-  redis.rpush("slacker:articles", article.to_json)
+  connection = PG.connect(dbname: 'slacker_news')
+  connection.exec_params(sql, [title][description][url])
+  connection.close
 end
+
+
+
+
+
 
 get '/' do
   @read = find_articles
