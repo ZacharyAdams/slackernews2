@@ -1,9 +1,9 @@
 <form action="/article_new" method="post">
   <label for="article_title">Article:</label>
-  <input type="text" id="article" name="article" value="<%= @article %>" required />
+  <input type="text" id="article" name="title" value="<%= @article %>" required />
 <br>
   <label for="article_url">Url:</label>
-  <input type="text" id="article_url" name="url" value ="<%= @url %>" required/>
+  <input type="url" id="url" name="url" value ="<%= @url %>" required/>
 <br>
 
   <!-- <label for="source">Source:</label>

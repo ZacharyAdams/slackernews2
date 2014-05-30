@@ -61,7 +61,7 @@ end
 
 def find_questions
   connection = PG.connect(dbname: 'slacker_news')
-  results = connection.exec('SELECT * FROM articles')
+  results = connection.exec('SELECT * FROM articles ORDER BY created_at DESC')
   connection.close
 
   results
@@ -88,7 +88,7 @@ post '/article_new' do
    if @description.length <= 20
      erb :form_page
   else
-      save_question(params["article"],params["description"],params["url"])
+      save_question(params["title"],params["description"],params["url"])
     # CSV.open("views/data.csv", "a") do |csv|
     #   if csv != ''
     #     csv.puts([@article,@url,@source,@description])
